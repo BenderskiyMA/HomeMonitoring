@@ -1,5 +1,7 @@
 import datetime
 
+from flask import jsonify
+
 from db import db
 
 
@@ -44,19 +46,19 @@ class SensorModel(db.Model):
         self.updateRate = updateRate
 
     def json(self):
-        return {"id": self.id,
-                "sensorName": self.sensorName,
-                "unitName": self.unitName,
-                "maxval": self.maxVal,
-                "minval": self.minVal,
-                "locationID": self.locationID,
-                "sourceList": self.sourceList,
-                "sensorMAC": self.sensorMAC,
-                "sensorType": self.sensorType,
-                "lastGoodValue": self.lastGoodValue,
-                "lastGoodValueTime": self.lastGoodValueTime,
-                "updateRate": self.updateRate
-                }
+        return jsonify({"id": self.id,
+                        "sensorName": self.sensorName,
+                        "unitName": self.unitName,
+                        "maxval": self.maxVal,
+                        "minval": self.minVal,
+                        "locationID": self.locationID,
+                        "sourceList": self.sourceList,
+                        "sensorMAC": self.sensorMAC,
+                        "sensorType": self.sensorType,
+                        "lastGoodValue": self.lastGoodValue,
+                        "lastGoodValueTime": self.lastGoodValueTime,
+                        "updateRate": self.updateRate
+                        })
 
     @classmethod
     def find_by_id(cls, _id: int):
