@@ -11,7 +11,15 @@ class UserModel(db.Model):
 
     def __init__(self, userName: str, userPassword: str):
         self.userName = userName
-        self.userPassword = sha256(userPassword).hexdigest()
+        self.userPassword = sha256(userPassword.encode('utf-8')).hexdigest()
+
+    @classmethod
+    def encodepassword(cls, password: str):
+        return sha256(password.encode('utf-8')).hexdigest()
+
+
+    def setpassword(self, password: str):
+        self.userPassword = self.encodepassword(password)
 
     def json(self):
         return {"id": self.id,
@@ -30,6 +38,14 @@ class UserModel(db.Model):
     @classmethod
     def find_all(cls):
         return cls.query.all()
+
+    @classmethod
+    def get_user_count(cls):
+        return cls.query.count()
+
+    @classmethod
+    def get_admin_count(cls):
+        return cls.query.filter_by(userRole=1).count()
 
     def save_to_db(self):
         db.session.add(self)
