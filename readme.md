@@ -15,7 +15,7 @@ and the client sides with:<br>
     <li>Java JSP admin page</li>
     <li>Kotlin Android app for monitoring</li>
     <li>React OnePage app for monitoring</li>
-    <li>Sensors, based on ESP8266 modules with Dallas DS 18b20 temperature sensors.</li>
+    <li>Sensors, based on ESP8266 modules with Dallas DS 18b20 temperature sensors (programmed in C++ in Arduino IDE).</li>
 </ul>
 
 
