@@ -65,8 +65,12 @@ class SensorModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
+    def find_by_sensorid(cls, sensorid: str):
+        return cls.query.filter_by(sensorMAC=sensorid).first()
+
+    @classmethod
     def find_by_location_id(cls, _locationid: int):
-        return cls.query.filter_by(locationID=_locationid).first()
+        return cls.query.filter_by(locationID=_locationid).all()
 
     @classmethod
     def find_all(cls):

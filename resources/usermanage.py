@@ -1,7 +1,7 @@
-from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_restful import Resource
+from flask_jwt_extended import jwt_required, get_jwt
 from model.user import UserModel
-from resources.userparser import _user_parser
+from utils.userparser import _user_parser
 
 
 def is_admin():
