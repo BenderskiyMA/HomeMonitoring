@@ -1,12 +1,11 @@
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
 from model.user import UserModel
-from utils.userparser import _user_parser
+from utils.functions import is_admin
+from utils.paramparsers import _user_parser
 
 
-def is_admin():
-    claims = get_jwt()
-    return claims['is_admin']
+
 
 
 class UserManage(Resource):

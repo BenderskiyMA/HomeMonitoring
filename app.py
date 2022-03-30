@@ -9,7 +9,7 @@ from model.user import UserModel
 from resources.blacklist import BLACKLIST
 from resources.location import Location
 from resources.locations import Locations
-from resources.sensor import Sensor
+from resources.sensor import Sensor, GetSensor
 from resources.sensors import Sensors
 from resources.setupadmin import SetupAdmin
 from resources.tokenrefresh import TokenRefresh
@@ -95,7 +95,8 @@ def add_claims_to_jwt(identity):
         return {'is_admin': False}
 
 
-api.add_resource(Sensor, '/sensor/<int:sensorId>')
+api.add_resource(Sensor, '/sensor')
+api.add_resource(GetSensor, '/sensor/<int:sensorId>')
 api.add_resource(Sensors, '/sensors')
 api.add_resource(Location, '/location/<int:locationId>')
 api.add_resource(Locations, '/locations')

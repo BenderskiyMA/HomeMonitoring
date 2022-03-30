@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from werkzeug.security import safe_str_cmp
 
 from model.user import UserModel
-from utils.userparser import _user_parser
+from utils.paramparsers import _user_parser
 
 
 class UserLogin(Resource):

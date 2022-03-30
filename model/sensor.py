@@ -1,6 +1,7 @@
 import datetime
 
 from flask import jsonify
+from sqlalchemy.sql.functions import now
 
 from db import db
 
@@ -24,41 +25,39 @@ class SensorModel(db.Model):
 
     def __init__(self, sensorName: str,
                  unitName: str,
-                 maxval: float,
-                 minval: float,
-                 locationID: int,
+                 maxVal: float,
+                 minVal: float,
+                 locationId: int,
                  sourceList: str,
                  sensorMAC: str,
                  sensorType: str,
-                 lastGoodValue: float,
-                 lastGoodValueTime: datetime,
                  updateRate: int):
         self.sensorName = sensorName
         self.unitName = unitName
-        self.maxVal = maxval
-        self.minVal = minval
-        self.locationID = locationID
+        self.maxVal = maxVal
+        self.minVal = minVal
+        self.locationID = locationId
         self.sourceList = sourceList,
         self.sensorMAC = sensorMAC,
         self.sensorType = sensorType,
-        self.lastGoodValue = lastGoodValue,
-        self.lastGoodValueTime = lastGoodValueTime,
+        self.lastGoodValue = 0,
         self.updateRate = updateRate
 
     def json(self):
-        return jsonify({"id": self.id,
-                        "sensorName": self.sensorName,
-                        "unitName": self.unitName,
-                        "maxval": self.maxVal,
-                        "minval": self.minVal,
-                        "locationID": self.locationID,
-                        "sourceList": self.sourceList,
-                        "sensorMAC": self.sensorMAC,
-                        "sensorType": self.sensorType,
-                        "lastGoodValue": self.lastGoodValue,
-                        "lastGoodValueTime": self.lastGoodValueTime,
-                        "updateRate": self.updateRate
-                        })
+        result = {"id": self.id,
+                          "sensorName": self.sensorName,
+                          "unitName": self.unitName,
+                          "maxVal": self.maxVal,
+                          "minVal": self.minVal,
+                          "locationId": self.locationID,
+                          "sourceList": self.sourceList,
+                          "sensorMAC": self.sensorMAC,
+                          "sensorType": self.sensorType,
+                          "lastGoodValue": self.lastGoodValue,
+                          "lastGoodValueTime":  self.lastGoodValueTime.isoformat(),
+                          "updateRate": self.updateRate
+                          }
+        return result
 
     @classmethod
     def find_by_id(cls, _id: int):

@@ -54,4 +54,7 @@ class ValueModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-
+    @classmethod
+    def delete_by_sensor_id(cls, sensorId: int):
+        cls.query.filter_by(sensorId=sensorId).delete()
+        db.session.commit()

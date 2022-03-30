@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from model.user import UserModel
-from utils.userparser import _user_parser
+from utils.paramparsers import _user_parser
 
 
 class SetupAdmin(Resource):
