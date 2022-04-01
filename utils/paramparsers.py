@@ -1,4 +1,5 @@
 from flask_restful import reqparse
+from flask_restful.reqparse import RequestParser
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument("username",
@@ -42,25 +43,25 @@ _sensor_parser.add_argument("sensorName",
                             required=True,
                             help="This field can not be blank!"
                             )
-_sensor_parser.add_argument("unitName",
+_sensor_parser.add_argument("sensorUnitName",
                             type=str,
                             required=True,
                             help="This field can not be blank!"
                             )
 
-_sensor_parser.add_argument("maxVal",
+_sensor_parser.add_argument("sensorMaxValue",
                             type=float,
                             required=True,
                             help="This field can not be blank!"
                             )
 
-_sensor_parser.add_argument("minVal",
+_sensor_parser.add_argument("sensorMinValue",
                             type=str,
                             required=True,
                             help="This field can not be blank!"
                             )
 
-_sensor_parser.add_argument("locationId",
+_sensor_parser.add_argument("locationID",
                             type=int,
                             required=True,
                             help="This field can not be blank!"
@@ -72,7 +73,7 @@ _sensor_parser.add_argument("sourceList",
                             help="This field can not be blank!"
                             )
 
-_sensor_parser.add_argument("sensorMAC",
+_sensor_parser.add_argument("sensorIdentifier",
                             type=str,
                             required=True,
                             help="This field can not be blank!"
@@ -89,3 +90,41 @@ _sensor_parser.add_argument("updateRate",
                             required=True,
                             help="This field can not be blank!"
                             )
+
+_location_parser: RequestParser = reqparse.RequestParser()
+_location_parser.add_argument("id",
+                              type=int,
+                              required=False,
+                              )
+
+_location_parser.add_argument("locationName",
+                              type=str,
+                              required=True,
+                              help="This field can not be blank!"
+                              )
+
+_location_parser.add_argument("locationCoordinates",
+                              type=str,
+                              required=False,
+                              help="This field can not be blank!"
+                              )
+
+_old_value_parser = reqparse.RequestParser()
+_old_value_parser.add_argument("act",
+                               type=str,
+                               required=True,
+                               help="This field can not be blank!"
+                               )
+_old_value_parser.add_argument("data",
+                               type=str,
+                               required=True,
+                               help="This field can not be blank!"
+                               )
+
+_value_parser = reqparse.RequestParser()
+_value_parser.add_argument("value",
+                               type=float,
+                               required=True,
+                               help="This field can not be blank!"
+                               )
+

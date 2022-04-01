@@ -44,19 +44,37 @@ class SensorModel(db.Model):
         self.updateRate = updateRate
 
     def json(self):
+        """
+                "id": 10,
+                "sensorName": "Температура в кессоне. Верх",
+                "sensorType": "temp",
+                "sensorUnitName": "celsius",
+                "sensorMaxValue": 100.0,
+                "sensorMinValue": -100.0,
+                "updateRate": 1,
+                "lastGoodValue": 0.56,
+                "lastGoodValueMoment": "2022-04-01T15:28:29.000+00:00",
+                "locationID": 1,
+                "locationName": "Дача",
+                "sourceList": "*",
+                "sensorIdentifier": "ESPBCFF4D82893FT1",
+                "changedState": false
+        """
         result = {"id": self.id,
-                          "sensorName": self.sensorName,
-                          "unitName": self.unitName,
-                          "maxVal": self.maxVal,
-                          "minVal": self.minVal,
-                          "locationId": self.locationID,
-                          "sourceList": self.sourceList,
-                          "sensorMAC": self.sensorMAC,
-                          "sensorType": self.sensorType,
-                          "lastGoodValue": self.lastGoodValue,
-                          "lastGoodValueTime":  self.lastGoodValueTime.isoformat(),
-                          "updateRate": self.updateRate
-                          }
+                  "sensorName": self.sensorName,
+                  "sensorUnitName": self.unitName,
+                  "sensorMaxValue": self.maxVal,
+                  "sensorMinValue": self.minVal,
+                  "locationID": self.locationID,
+                  "locationName": self.location.locationName,
+                  "sourceList": self.sourceList,
+                  "sensorIdentifier": self.sensorMAC,
+                  "sensorType": self.sensorType,
+                  "lastGoodValue": self.lastGoodValue,
+                  "lastGoodValueMoment": self.lastGoodValueTime.isoformat(),
+                  "updateRate": self.updateRate,
+                  "changedState": False
+                  }
         return result
 
     @classmethod

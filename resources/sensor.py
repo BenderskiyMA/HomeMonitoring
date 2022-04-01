@@ -9,7 +9,7 @@ from utils.functions import is_admin, ERROR_ACCESS_DENIED
 from utils.paramparsers import _sensor_parser
 
 
-class GetSensor(Resource):
+class Sensor(Resource):
 
     @jwt_required(fresh=True)
     def get(self, sensorId: int):
@@ -24,7 +24,7 @@ class GetSensor(Resource):
             return ERROR_ACCESS_DENIED, 403
 
     @jwt_required(fresh=True)
-    def delete(self, sensorId:int):
+    def delete(self, sensorId: int):
         if is_admin():
             try:
                 s = SensorModel.find_by_id(sensorId)
@@ -39,17 +39,38 @@ class GetSensor(Resource):
         else:
             return ERROR_ACCESS_DENIED, 403
 
-
-class Sensor(Resource):
-
     @jwt_required(fresh=True)
-    def post(self):
+    def post(self, sensorId: int):
         if is_admin():
             data = _sensor_parser.parse_args()
-            if data["sensorMAC"] and SensorModel.find_by_sensorid(data["sensorMAC"]):
-                return {"Message": "Error! Sensor with sensorMAC '{}' already exists.".format(data["sensorMAC"])}, 400
+            if data["sensorIdentifier"] and SensorModel.find_by_sensorid(data["sensorIdentifier"]):
+                return {"Message": "Error! Sensor with sensorMAC '{}' already exists.".format(
+                    data["sensorIdentifier"])}, 400
             del data["id"]
-            s = SensorModel(**data)
+            # "id": 10,
+            # "sensorName": "Температура в кессоне. Верх",
+            # "sensorType": "temp",
+            # "sensorUnitName": "celsius",
+            # "sensorMaxValue": 100.0,
+            # "sensorMinValue": -100.0,
+            # "updateRate": 1,
+            # "lastGoodValue": 0.56,
+            # "lastGoodValueMoment": "2022-04-01T15:28:29.000+00:00",
+            # "locationID": 1,
+            # "locationName": "Дача",
+            # "sourceList": "*",
+            # "sensorIdentifier": "ESPBCFF4D82893FT1",
+            # "changedState": false
+            s = SensorModel(sensorName=data["sensorName"],
+                            sensorType=data["sensorType"],
+                            unitName=data["sensorUnitName"],
+                            maxVal=data["sensorMaxValue"],
+                            minVal=data["sensorMinValue"],
+                            updateRate=data["updateRate"],
+                            locationId=data["locationID"],
+                            sourceList=data["sourceList"],
+                            sensorMAC=data["sensorIdentifier"]
+                            )
             s.save_to_db()
             return {"Message": "Sensor added."}, 201
 
@@ -57,18 +78,19 @@ class Sensor(Resource):
             return ERROR_ACCESS_DENIED, 403
 
     @jwt_required(fresh=True)
-    def put(self):
+    def put(self, sensorId: int):
         if is_admin():
             data = _sensor_parser.parse_args()
-            s = SensorModel.find_by_sensorid(data["sensorMAC"])
+            s = SensorModel.find_by_sensorid(data["sensorIdentifier"])
             try:
                 if s:
                     # KEEP id, sensorMAC, lastGoodValue
+
                     s.sensorName = data["sensorName"]
-                    s.unitName = data["unitName"]
-                    s.maxVal = data["maxVal"]
-                    s.minVal = data["minVal"]
-                    s.locationID = data["locationId"]
+                    s.unitName = data["sensorUnitName"]
+                    s.maxVal = data["sensorMaxValue"]
+                    s.minVal = data["sensorMinValue"]
+                    s.locationID = data["locationID"]
                     s.sourceList = data["sourceList"]
                     s.sensorType = data["sensorType"]
                     s.updateRate = data["updateRate"]
@@ -82,4 +104,3 @@ class Sensor(Resource):
                 return {"Message": "Error occurred. {}".format(E)}, 500
         else:
             return ERROR_ACCESS_DENIED, 403
-

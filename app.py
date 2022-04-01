@@ -9,14 +9,14 @@ from model.user import UserModel
 from resources.blacklist import BLACKLIST
 from resources.location import Location
 from resources.locations import Locations
-from resources.sensor import Sensor, GetSensor
+from resources.sensor import Sensor
 from resources.sensors import Sensors
 from resources.setupadmin import SetupAdmin
 from resources.tokenrefresh import TokenRefresh
 from resources.userlogin import UserLogin
 from resources.userlogout import UserLogout
 from resources.usermanage import UserManage
-from resources.value import Value
+from resources.value import Value, ValueOld
 from resources.values import Values
 
 app = Flask(__name__)
@@ -95,12 +95,12 @@ def add_claims_to_jwt(identity):
         return {'is_admin': False}
 
 
-api.add_resource(Sensor, '/sensor')
-api.add_resource(GetSensor, '/sensor/<int:sensorId>')
+api.add_resource(Sensor, '/sensor/<int:sensorId>')
 api.add_resource(Sensors, '/sensors')
-api.add_resource(Location, '/location/<int:locationId>')
+api.add_resource(Location, '/location/<int:locationID>')
 api.add_resource(Locations, '/locations')
-api.add_resource(Value, '/data/')
+api.add_resource(ValueOld, '/data/')
+api.add_resource(Value, '/value/<string:sensorId>')
 api.add_resource(Values, '/values/<string:periodType>/')
 api.add_resource(UserLogin, '/login')
 api.add_resource(TokenRefresh, '/refresh')

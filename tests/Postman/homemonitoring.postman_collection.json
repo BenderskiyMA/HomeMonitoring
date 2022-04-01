@@ -1,0 +1,635 @@
+{
+	"info": {
+		"_postman_id": "30d24a5d-4ffd-4a41-81b0-d16aa7968192",
+		"name": "homemonitoring",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/setupadmin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"admin\",\"password\": \"3kjt6extcnm\"}"
+				},
+				"url": {
+					"raw": "{{url}}/setupadmin",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"setupadmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=JSON.parse(responseBody);\r",
+							"tests[\"Access token not empty\"]=jsonData.access_token!==undefined;\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/refresh",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=JSON.parse(responseBody);\r",
+							"tests[\"Access token not empty\"]=jsonData.access_token!==undefined;\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"admin\",\"password\":\"3kjt6extcnm\"}"
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"price\":11.99,\r\n\"store_id\":1\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{url}}/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/usermanage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"remlo\" ,\"password\": \"123QWEasd\", \"userrole\": 1}"
+				},
+				"url": {
+					"raw": "{{url}}/usermanage",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usermanage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/usermanage",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"remlo5\" ,\"password\": \"123QWEasd\", \"userrole\": 1}"
+				},
+				"url": {
+					"raw": "{{url}}/usermanage",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usermanage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/usermanage",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"remlo5\" ,\"password\": \"123QWEasd\", \"userrole\": 1}"
+				},
+				"url": {
+					"raw": "{{url}}/usermanage/remlo5",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"usermanage",
+						"remlo5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/data/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/?act=add&data=4535234523$238\n23412421433$4.3\n45352345235$-4.5\n252523523$-6\n232222222$73",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						""
+					],
+					"query": [
+						{
+							"key": "act",
+							"value": "add"
+						},
+						{
+							"key": "data",
+							"value": "4535234523$238\n23412421433$4.3\n45352345235$-4.5\n252523523$-6\n232222222$73"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sensor/id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/sensor/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sensor",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/location/id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/location/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"location",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/locations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/locations",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"locations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/location/id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Message\": \"Location .\"}"
+				},
+				"url": {
+					"raw": "{{url}}/location/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"location",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/location/id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2,\r\n    \"locationName\": \"Дом\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/location/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"location",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/location/id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2,\r\n    \"locationName\": \"Дом\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/location/3",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"location",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sensors",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/sensors",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sensors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sensor",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n        \"sensorName\": \"Test13\",\r\n        \"sensorUnitName\": \"degree\",\r\n        \"sensorMaxValue\": 100.0,\r\n        \"sensorMinValue\": 0.0,\r\n        \"locationID\": 1,\r\n        \"locationName\": \"Дача\",\r\n        \"sourceList\": \"*\",\r\n        \"sensorIdentifier\": \"2DW52523523\",\r\n        \"sensorType\": \"temp\",\r\n        \"lastGoodValue\": 0.0,\r\n        \"lastGoodValueMoment\": \"2022-03-29T23:36:25\",\r\n        \"updateRate\": 1,\r\n        \"changedState\": false\r\n    }"
+				},
+				"url": {
+					"raw": "{{url}}/sensor",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sensor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sensor",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 8,\r\n        \"sensorName\": \"Test143\",\r\n        \"sensorUnitName\": \"degree\",\r\n        \"sensorMaxValue\": 100.0,\r\n        \"sensorMinValue\": 0.0,\r\n        \"locationID\": 1,\r\n        \"locationName\": \"Дача\",\r\n        \"sourceList\": \"*\",\r\n        \"sensorIdentifier\": \"2DW52523523\",\r\n        \"sensorType\": \"temp\",\r\n        \"lastGoodValue\": 0.0,\r\n        \"lastGoodValueMoment\": \"2022-03-29T23:36:25\",\r\n        \"updateRate\": 1,\r\n        \"changedState\": false\r\n    }"
+				},
+				"url": {
+					"raw": "{{url}}/sensor/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sensor",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sensor/id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/sensor/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"sensor",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/value/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\": 10\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/value/232222222W",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"value",
+						"232222222W"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

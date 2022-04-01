@@ -6,22 +6,13 @@ from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from model.sensor import SensorModel
 from model.value import ValueModel
 from utils.functions import isfloat, getfloat, checkrange
-
-_value_parser = reqparse.RequestParser()
-_value_parser.add_argument("act",
-                           type=str,
-                           required=True,
-                           help="This field can not be blank!"
-                           )
-_value_parser.add_argument("data",
-                           type=str,
-                           required=True,
-                           help="This field can not be blank!"
-                           )
+from utils.paramparsers import _old_value_parser, _value_parser
 
 
-class Value(Resource):
+class ValueOld(Resource):
 
+    # Old API for old sensors
+    # adding via GET String like narodmon.ru project
     def get(self):
         # Parse following data(act=add and miltiline sensorid$value pairs)
         # http://localhost:8080/data/?act=add&data=4535234523$238
@@ -29,7 +20,7 @@ class Value(Resource):
         # 45352345235$-4.5
         # 252523523$-6
         # 232222222$73
-        data = _value_parser.parse_args()
+        data = _old_value_parser.parse_args()
         errtext = ""
         errcode = 200
 
@@ -74,3 +65,34 @@ class Value(Resource):
             return errtext, errcode
         else:
             return {"message": "Error! Invalid act value: {}".format(data["act"])}, 500
+
+
+class Value(Resource):
+    # @jwt_required(fresh=True)
+    def post(self, sensorId: str):
+        data = _value_parser.parse_args()
+        sensor = SensorModel.find_by_sensorid(sensorId)
+        if sensor and data["value"] and isfloat(data["value"]):
+            fv = getfloat(data["value"])
+            lt = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+            nt = datetime.now()
+            if lt < nt:
+                # Time delta is valid, check the value
+                v = ValueModel(fv, True, sensor.id)
+                if v:
+                    if not checkrange(fv, sensor.minVal, sensor.maxVal):
+                        v.valid = False
+                    else:
+                        sensor.lastGoodValue = fv
+                        sensor.lastGoodValueTime = nt
+                        sensor.save_to_db()
+                    v.save_to_db()
+                    return sensor.updateRate, 200
+                else:
+                    return {"message": "Request has one or more Errors! Can not create ValueModel "
+                                       "object."}, 500
+            else:
+                return {"message": "Request has one or more Errors! Too many requests."}, 400
+        else:
+            return {"message": "Request has one or more Errors! Can not find Sensor object with id {}.".format(
+                sensorId)}, 500
