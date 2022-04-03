@@ -1,13 +1,7 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.8-alpine-2021-10-2621-10-26-alpine3.7
-RUN apk --update add bash nano
+FROM tiangolo/uwsgi-nginx-flask:python3.8-2020-05-09
 ENV jwt_secret_key ""
 ENV DATABASE_URL ""
-COPY ./requirements.txt /var/www/requirements.txt
-COPY ./model /var/www/app
-COPY ./resources /var/www/app
-COPY ./static /var/www/app
-COPY ./utils /var/www/app
-COPY ./*.py /var/www/app
-COPY ./uwsgi.ini /var/www/py
-RUN pip install -r /var/www/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
+COPY . /app
+RUN pip install -r /app/requirements.txt
 
