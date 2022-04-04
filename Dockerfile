@@ -4,4 +4,3 @@ ENV DATABASE_URL ""
 COPY ./requirements.txt /app/requirements.txt
 COPY . /app
 RUN pip install -r /app/requirements.txt
-
