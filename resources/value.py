@@ -27,8 +27,8 @@ class ValueOld(Resource):
         if data["act"] == "add":
             for line in data["data"].split("\n"):
                 (sensorid, value) = line.split("$")
-
-                if sensorid and value and isfloat(value):
+                isf = isfloat(value)
+                if sensorid and value and isf:
                     fv = getfloat(value)
                     s = SensorModel.find_by_sensorid(sensorid)
                     if s:

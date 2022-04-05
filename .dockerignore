@@ -1,2 +1,3 @@
 /venv
-/start.cmd
+/start_locaL.cmd
+/deploy_to_production.cmd

@@ -1,4 +1,6 @@
 /venv
 /.idea
 Dockerfile
-start.cmd
+start_local.cmd
+deploy_to_production.cmd
+
