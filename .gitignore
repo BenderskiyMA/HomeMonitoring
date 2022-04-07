@@ -1,6 +1,6 @@
 /venv
 /.idea
-Dockerfile
-start_local.cmd
-deploy_to_production.cmd
-
+/Dockerfile
+/deploy_to_production.cmd
+/tempmon.sql
+/deploy_test.cmd

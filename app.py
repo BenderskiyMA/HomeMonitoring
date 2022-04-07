@@ -18,8 +18,9 @@ from resources.userlogout import UserLogout
 from resources.usermanage import UserManage
 from resources.value import Value, ValueOld
 from resources.values import Values
+from flask import Blueprint, send_from_directory
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static/react')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = False
@@ -107,6 +108,16 @@ api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(SetupAdmin, '/setupadmin')
 api.add_resource(UserManage, '/usermanage/<string:username>')
+
+
+@app.route('/react/', defaults={'path': 'index.html'})
+@app.route('/react/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
 
 if __name__ == '__main__':
     from db import db
