@@ -3,10 +3,10 @@ from flask_jwt_extended import get_jwt
 ERROR_ACCESS_DENIED = {"message": "Error! Access denied!"}
 
 
-def isfloat(num):
+def isfloat(num: str):
     try:
-        return type(num) == int or type(num) == float
-    except ValueError:
+        return not num == "nan" and not num == "infinity" and type(float(num)) == float
+    except:
         return False
 
 
