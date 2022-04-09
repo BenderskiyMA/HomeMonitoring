@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
 from model.sensor import SensorModel
 from model.value import ValueModel
-from utils.functions import isfloat, getfloat, checkrange
+from utils.functions import isfloat, getfloat, checkvalueinrange
 from utils.paramparsers import _old_value_parser, _value_parser
 
 
@@ -38,7 +38,7 @@ class ValueOld(Resource):
                                 # Time delta is valid, check the value
                                 v = ValueModel(fv, True, s.id)
                                 if v:
-                                    if not checkrange(fv, s.minVal, s.maxVal):
+                                    if not checkvalueinrange(fv, s.minVal, s.maxVal):
                                         v.valid = False
                                     else:
                                         s.lastGoodValue = fv
@@ -82,7 +82,7 @@ class Value(Resource):
                 # Time delta is valid, check the value
                 v = ValueModel(fv, True, sensor.id)
                 if v:
-                    if not checkrange(fv, sensor.minVal, sensor.maxVal):
+                    if not checkvalueinrange(fv, sensor.minVal, sensor.maxVal):
                         v.valid = False
                     else:
                         sensor.lastGoodValue = fv

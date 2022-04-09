@@ -1,7 +1,3 @@
-import datetime
-
-from flask import jsonify
-from sqlalchemy.sql.functions import now
 
 from db import db
 
@@ -24,21 +20,21 @@ class SensorModel(db.Model):
     location = db.relationship('LocationModel')
 
     def __init__(self, sensorName: str,
-                 unitName: str,
-                 maxVal: float,
-                 minVal: float,
-                 locationId: int,
+                 sensorUnitName: str,
+                 sensorMaxValue: float,
+                 sensorMinValue: float,
+                 locationID: int,
                  sourceList: str,
-                 sensorMAC: str,
+                 sensorIdentifier: str,
                  sensorType: str,
                  updateRate: int):
         self.sensorName = sensorName
-        self.unitName = unitName
-        self.maxVal = maxVal
-        self.minVal = minVal
-        self.locationID = locationId
+        self.unitName = sensorUnitName
+        self.maxVal = sensorMaxValue
+        self.minVal = sensorMinValue
+        self.locationID = locationID
         self.sourceList = sourceList,
-        self.sensorMAC = sensorMAC,
+        self.sensorMAC = sensorIdentifier,
         self.sensorType = sensorType,
         self.lastGoodValue = 0,
         self.updateRate = updateRate

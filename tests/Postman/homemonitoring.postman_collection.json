@@ -18,13 +18,18 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\": \"admin\",\"password\": \"3kjt6extcnm\"}"
+					"raw": "{\"username\": \"admin\",\"password\": \"123QWEasd\"}"
 				},
 				"url": {
-					"raw": "{{url}}/setupadmin",
+					"raw": "http://192.168.1.249:8088/setupadmin",
+					"protocol": "http",
 					"host": [
-						"{{url}}"
+						"192",
+						"168",
+						"1",
+						"249"
 					],
+					"port": "8088",
 					"path": [
 						"setupadmin"
 					]
@@ -87,7 +92,9 @@
 						"exec": [
 							"var jsonData=JSON.parse(responseBody);\r",
 							"tests[\"Access token not empty\"]=jsonData.access_token!==undefined;\r",
-							"pm.environment.set(\"jwt_token\", jsonData.access_token);"
+							"pm.environment.set(\"jwt_token\", jsonData.access_token);\r",
+							"tests[\"Refresh token not empty\"]=jsonData.refresh_token!==undefined;\r",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
 						],
 						"type": "text/javascript"
 					}
@@ -104,7 +111,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\":\"admin\",\"password\":\"3kjt6extcnm\"}"
+					"raw": "{\"username\":\"admin\",\"password\":\"123QWEasd\"}"
 				},
 				"url": {
 					"raw": "{{url}}/login",
@@ -200,7 +207,7 @@
 			"response": []
 		},
 		{
-			"name": "/usermanage",
+			"name": "/usermanage/<username>",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -217,15 +224,16 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\":\"remlo5\" ,\"password\": \"123QWEasd\", \"userrole\": 1}"
+					"raw": "{\"username\":\"admin\" ,\"password\": \"123QWEasd\", \"userrole\": 1}"
 				},
 				"url": {
-					"raw": "{{url}}/usermanage",
+					"raw": "{{url}}/usermanage/admin",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"usermanage"
+						"usermanage",
+						"admin"
 					]
 				}
 			},
@@ -270,11 +278,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/data/?act=add&data=4535234523$238\n23412421433$4.3\n45352345235$-4.5\n252523523$-6\n232222222$73",
+					"raw": "{{url}}/monitoring/data/?act=add&data=ESPB4E62D3773ACT3$nan",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"monitoring",
 						"data",
 						""
 					],
@@ -285,7 +294,7 @@
 						},
 						{
 							"key": "data",
-							"value": "4535234523$238\n23412421433$4.3\n45352345235$-4.5\n252523523$-6\n232222222$73"
+							"value": "ESPB4E62D3773ACT3$nan"
 						}
 					]
 				}
@@ -293,7 +302,7 @@
 			"response": []
 		},
 		{
-			"name": "/sensor/id",
+			"name": "/api/sensor/id",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -309,20 +318,21 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/sensor/1",
+					"raw": "{{url}}/api/sensor/23",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"sensor",
-						"1"
+						"23"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/location/id",
+			"name": "/api/location/id",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -338,11 +348,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/location/1",
+					"raw": "{{url}}/api/location/1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"location",
 						"1"
 					]
@@ -351,7 +362,7 @@
 			"response": []
 		},
 		{
-			"name": "/locations",
+			"name": "/api/locations",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -367,11 +378,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/locations",
+					"raw": "{{url}}/api/locations",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"locations"
 					]
 				}
@@ -379,7 +391,7 @@
 			"response": []
 		},
 		{
-			"name": "/location/id",
+			"name": "/api/location/id",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -396,14 +408,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Message\": \"Location .\"}"
+					"raw": "{\r\n    \"id\": 1,\r\n    \"locationName\": \"Дом\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/location/1",
+					"raw": "{{url}}/api/location/1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"location",
 						"1"
 					]
@@ -412,7 +425,7 @@
 			"response": []
 		},
 		{
-			"name": "/location/id",
+			"name": "/api/location/id",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -429,23 +442,24 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 2,\r\n    \"locationName\": \"Дом\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
+					"raw": "{\r\n    \"id\": 2,\r\n    \"locationName\": \"Дача\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/location/1",
+					"raw": "{{url}}/api/location/2",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"location",
-						"1"
+						"2"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/location/id",
+			"name": "/api/location/id",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -465,11 +479,12 @@
 					"raw": "{\r\n    \"id\": 2,\r\n    \"locationName\": \"Дом\",\r\n    \"locationCoordinates\": \"54.786003,82.726483\"\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/location/3",
+					"raw": "{{url}}/api/location/3",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"location",
 						"3"
 					]
@@ -478,7 +493,7 @@
 			"response": []
 		},
 		{
-			"name": "/sensors",
+			"name": "/api/sensors",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -494,11 +509,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{url}}/sensors",
+					"raw": "{{url}}/api/sensors",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"sensors"
 					]
 				}
@@ -506,7 +522,7 @@
 			"response": []
 		},
 		{
-			"name": "/sensor",
+			"name": "/api/sensor/0",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -523,22 +539,24 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n        \"sensorName\": \"Test13\",\r\n        \"sensorUnitName\": \"degree\",\r\n        \"sensorMaxValue\": 100.0,\r\n        \"sensorMinValue\": 0.0,\r\n        \"locationID\": 1,\r\n        \"locationName\": \"Дача\",\r\n        \"sourceList\": \"*\",\r\n        \"sensorIdentifier\": \"2DW52523523\",\r\n        \"sensorType\": \"temp\",\r\n        \"lastGoodValue\": 0.0,\r\n        \"lastGoodValueMoment\": \"2022-03-29T23:36:25\",\r\n        \"updateRate\": 1,\r\n        \"changedState\": false\r\n    }"
+					"raw": "{\r\n    \r\n        \"sensorName\": \"Test413\",\r\n        \"sensorUnitName\": \"degree\",\r\n        \"sensorMaxValue\": 100.0,\r\n        \"sensorMinValue\": 0.0,\r\n        \"locationID\": 1,\r\n        \"locationName\": \"Дача\",\r\n        \"sourceList\": \"*\",\r\n        \"sensorIdentifier\": \"12DW52523523\",\r\n        \"sensorType\": \"temp\",\r\n        \"lastGoodValue\": 0.0,\r\n        \"lastGoodValueMoment\": \"2022-03-29T23:36:25\",\r\n        \"updateRate\": 1,\r\n        \"changedState\": false\r\n    }"
 				},
 				"url": {
-					"raw": "{{url}}/sensor",
+					"raw": "{{url}}/api/sensor/0",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"sensor"
+						"api",
+						"sensor",
+						"0"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/sensor",
+			"name": "/api/sensor",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -558,20 +576,21 @@
 					"raw": "{\r\n        \"id\": 8,\r\n        \"sensorName\": \"Test143\",\r\n        \"sensorUnitName\": \"degree\",\r\n        \"sensorMaxValue\": 100.0,\r\n        \"sensorMinValue\": 0.0,\r\n        \"locationID\": 1,\r\n        \"locationName\": \"Дача\",\r\n        \"sourceList\": \"*\",\r\n        \"sensorIdentifier\": \"2DW52523523\",\r\n        \"sensorType\": \"temp\",\r\n        \"lastGoodValue\": 0.0,\r\n        \"lastGoodValueMoment\": \"2022-03-29T23:36:25\",\r\n        \"updateRate\": 1,\r\n        \"changedState\": false\r\n    }"
 				},
 				"url": {
-					"raw": "{{url}}/sensor/1",
+					"raw": "{{url}}/api/sensor/8",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"sensor",
-						"1"
+						"8"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/sensor/id",
+			"name": "/api/sensor/30",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -591,20 +610,21 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/sensor/1",
+					"raw": "{{url}}/api/sensor/30",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"sensor",
-						"1"
+						"30"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/value/",
+			"name": "/api/value/",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -616,16 +636,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"value\": 10\r\n}"
+					"raw": "{\r\n    \"value\": 14\r\n}"
 				},
 				"url": {
-					"raw": "{{url}}/value/232222222W",
+					"raw": "{{url}}/api/value/ESPBCFF4D82893FT1",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
+						"api",
 						"value",
-						"232222222W"
+						"ESPBCFF4D82893FT1"
 					]
 				}
 			},
