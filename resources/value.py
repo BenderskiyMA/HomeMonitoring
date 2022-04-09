@@ -47,7 +47,7 @@ class ValueOld(Resource):
                                         sensor.lastGoodValueTime = nowtime
                                         sensor.save_to_db()
                                     newvalue.save_to_db()
-                                    errtext = sensor.updateRate
+                                    errtext = str(sensor.updateRate)
                                     errcode = 200
 
                                 else:
@@ -92,7 +92,7 @@ class Value(Resource):
                             sensor.lastGoodValueTime = nowtime
                             sensor.save_to_db()
                         newvalue.save_to_db()
-                        return sensor.updateRate, 200
+                        return str(sensor.updateRate), 200
                     else:
                         return {"message": "Request has one or more Errors! Can not create ValueModel "
                                            "object."}, 500
