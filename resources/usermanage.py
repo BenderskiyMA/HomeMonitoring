@@ -16,12 +16,12 @@ class UserManage(Resource):
 
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
-        data = _user_parser.parse_args()
+        data: dict = _user_parser.parse_args()
         if data["userrole"] is None:
             data["userrole"] = 0
         if UserModel.find_by_name(username):
             return {"message": "Error! User exists, use PUT or DELETE method"}, 400
-        user = UserModel(username, data["password"])
+        user: UserModel = UserModel(username, data["password"])
         user.userRole = data["userrole"]
         user.save_to_db()
         return {"message": "User created."}, 201
@@ -30,22 +30,21 @@ class UserManage(Resource):
     def put(self, username: str) -> Tuple:
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
-        data = _user_parser.parse_args()
+        data: dict = _user_parser.parse_args()
         if data["userrole"] is None:
             data["userrole"] = 0
-        user = UserModel.find_by_name(username)
-        new = False
+        user: UserModel = UserModel.find_by_name(username)
+        olduserflag: bool = True
         if user is None:
             user = UserModel(username, data["password"])
-            new = True
+            olduserflag = False
         else:
             user.setpassword(data["password"])
-        if not new and user.userRole == 1 and UserModel.get_admin_count() == 1 and data["userrole"] == 0:
+        if olduserflag and user.userRole == 1 and UserModel.get_admin_count() == 1 and data["userrole"] == 0:
             return {"message": "Error! Can not set to simple last admin user!"}
-
         user.userRole = data["userrole"]
         user.save_to_db()
-        if new:
+        if not olduserflag:
             return {"message": "User created."}, 201
         else:
             return {"message": "User modified."}, 201
@@ -54,8 +53,7 @@ class UserManage(Resource):
     def delete(self, username: str) -> Tuple:
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
-        data = _user_parser.parse_args()
-        user = UserModel.find_by_name(username)
+        user: UserModel = UserModel.find_by_name(username)
         if user is None:
             return {"message": "Error! User does not exist."}, 400
         else:
@@ -66,4 +64,4 @@ class UserManage(Resource):
                     return {"message": "Error! Can not delete last Admin user."}, 400
             else:
                 return {"message": "Error! Can not delete last user."}, 400
-        return {"message": "User deleted."}
+        return {"message": "User deleted."}, 200

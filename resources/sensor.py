@@ -15,11 +15,11 @@ class Sensor(Resource):
     @jwt_required(fresh=True)
     def get(self, sensorId: int) -> Tuple:
         if is_admin():
-            s = SensorModel.find_by_id(sensorId)
-            if s is None:
+            sensor: SensorModel = SensorModel.find_by_id(sensorId)
+            if sensor is None:
                 return {"message": "Error! Sensor not found."}, 404
             else:
-                return s.json(), 200
+                return sensor.json(), 200
 
         else:
             return ERROR_ACCESS_DENIED, 403
@@ -28,10 +28,10 @@ class Sensor(Resource):
     def delete(self, sensorId: int) -> Tuple:
         if is_admin():
             try:
-                s = SensorModel.find_by_id(sensorId)
-                if s:
-                    ValueModel.delete_by_sensor_id(sensorId=s.id)
-                    s.delete()
+                sensor: SensorModel = SensorModel.find_by_id(sensorId)
+                if sensor:
+                    ValueModel.delete_by_sensor_id(sensorId=sensor.id)
+                    sensor.delete()
                 else:
                     return {"Message": "Error! Sensor not found."}, 404
             except Exception as E:
@@ -43,12 +43,12 @@ class Sensor(Resource):
     @jwt_required(fresh=True)
     def post(self, sensorId: int) -> Tuple:
         if is_admin():
-            data = _sensor_parser.parse_args()
+            data: dict = _sensor_parser.parse_args()
             if data["sensorIdentifier"] and SensorModel.find_by_sensorid(data["sensorIdentifier"]):
                 return {"Message": "Error! Sensor with sensorMAC '{}' already exists.".format(
                     data["sensorIdentifier"])}, 400
             del data["id"]
-            s = SensorModel(sensorName=data["sensorName"],
+            sensor: SensorModel = SensorModel(sensorName=data["sensorName"],
                             sensorType=data["sensorType"],
                             unitName=data["sensorUnitName"],
                             maxVal=data["sensorMaxValue"],
@@ -58,7 +58,7 @@ class Sensor(Resource):
                             sourceList=data["sourceList"],
                             sensorMAC=data["sensorIdentifier"]
                             )
-            s.save_to_db()
+            sensor.save_to_db()
             return {"Message": "Sensor added."}, 201
 
         else:
@@ -67,26 +67,26 @@ class Sensor(Resource):
     @jwt_required(fresh=True)
     def put(self, sensorId: int) -> Tuple:
         if is_admin():
-            data = _sensor_parser.parse_args()
-            s = SensorModel.find_by_sensorid(data["sensorIdentifier"])
+            data: dict = _sensor_parser.parse_args()
+            sensor: SensorModel = SensorModel.find_by_sensorid(data["sensorIdentifier"])
             try:
-                if s:
+                if sensor:
                     # KEEP id, sensorMAC, lastGoodValue
 
-                    s.sensorName = data["sensorName"]
-                    s.unitName = data["sensorUnitName"]
-                    s.maxVal = data["sensorMaxValue"]
-                    s.minVal = data["sensorMinValue"]
-                    s.locationID = data["locationID"]
-                    s.sourceList = data["sourceList"]
-                    s.sensorType = data["sensorType"]
-                    s.updateRate = data["updateRate"]
-                    s.save_to_db()
+                    sensor.sensorName = data["sensorName"]
+                    sensor.unitName = data["sensorUnitName"]
+                    sensor.maxVal = data["sensorMaxValue"]
+                    sensor.minVal = data["sensorMinValue"]
+                    sensor.locationID = data["locationID"]
+                    sensor.sourceList = data["sourceList"]
+                    sensor.sensorType = data["sensorType"]
+                    sensor.updateRate = data["updateRate"]
+                    sensor.save_to_db()
                 else:
                     del data["id"]
-                    s = SensorModel(**data)
-                    s.save_to_db()
-                return s.json(), 200
+                    sensor = SensorModel(**data)
+                    sensor.save_to_db()
+                return sensor.json(), 200
             except Exception as E:
                 return {"Message": "Error occurred. {}".format(E)}, 500
         else:

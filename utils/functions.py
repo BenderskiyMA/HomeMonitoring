@@ -1,3 +1,5 @@
+from typing import Union
+
 from flask_jwt_extended import get_jwt
 from psycopg2._psycopg import Boolean
 
@@ -10,7 +12,7 @@ def isfloat(num: str) -> bool:
     return num.replace(".", "", 1).replace("-", "", 1).isnumeric()
 
 
-def getfloat(num: str) -> float:
+def getfloat(num: str) -> Union[float, None]:
     """Takes a string, representing number (positive  or negative or zero), returns it float value or None"""
     if isfloat(num):
         return float(num)

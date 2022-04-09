@@ -11,5 +11,5 @@ class Locations(Resource):
     def get(self) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
-        locations = [x.json() for x in LocationModel.find_all()]
+        locations: list = [x.json() for x in LocationModel.find_all()]
         return locations, 200
