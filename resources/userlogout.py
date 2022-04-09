@@ -9,8 +9,8 @@ from resources.blacklist import BLACKLIST
 class UserLogout(Resource):
     @jwt_required()
     def post(self) -> Tuple:
-        jti = get_jwt()['jti']
+        jti: dict = get_jwt()['jti']
         BLACKLIST.add(jti)
-        return {"Message": "success logged out."}
+        return {"Message": "success logged out."}, 200
 
 

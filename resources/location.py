@@ -13,7 +13,7 @@ class Location(Resource):
     def get(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
-        location = LocationModel.find_by_id(locationID)
+        location: LocationModel = LocationModel.find_by_id(locationID)
         if location is None:
             return {"Message": "Error! Location not found."}, 404
         return location.json()
@@ -22,7 +22,7 @@ class Location(Resource):
     def post(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
-        data = _location_parser.parse_args()
+        data: dict = _location_parser.parse_args()
         if LocationModel.find_by_name(data["locationName"]):
             return {"Message": "Error! Location already exists '{}'.".format(data["locationName"])}, 400
         try:
@@ -35,11 +35,11 @@ class Location(Resource):
     def put(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
-        data = _location_parser.parse_args()
-        location = LocationModel.find_by_id(locationID)
+        data: dict = _location_parser.parse_args()
+        location: LocationModel = LocationModel.find_by_id(locationID)
         if location is None:
             return {"Message": "Error! Location not found."}, 400
-        locationnew = LocationModel.find_by_name(data["locationName"])
+        locationnew: LocationModel = LocationModel.find_by_name(data["locationName"])
         if (locationnew is not None) and not (location.id == locationnew.id):
             return {"Message": "Error! Location already exists '{}'.".format(data["locationName"])}, 400
         try:

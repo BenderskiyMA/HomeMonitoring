@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Tuple
+from typing import Tuple, Union
 
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
@@ -22,8 +22,8 @@ class ValueOld(Resource):
         # 45352345235$-4.5
         # 252523523$-6
         # 232222222$73
-        data = _old_value_parser.parse_args()
-        errtext = ""
+        data: dict = _old_value_parser.parse_args()
+        errtext: Union[str, dict] = ""
         errcode: int = 200
 
         if data["act"] == "add":
@@ -32,13 +32,13 @@ class ValueOld(Resource):
                 if sensorid and functions.isfloat(value):
                     floatvalue = functions.getfloat(str(value))
                     if floatvalue:
-                        sensor = SensorModel.find_by_sensorid(sensorid)
+                        sensor: SensorModel = SensorModel.find_by_sensorid(sensorid)
                         if sensor:
-                            allowedtime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
-                            nowtime = datetime.now()
+                            allowedtime: datetime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+                            nowtime: datetime = datetime.now()
                             if allowedtime < nowtime:
                                 # Time delta is valid, check the value
-                                newvalue = ValueModel(floatvalue, True, sensor.id)
+                                newvalue: ValueModel = ValueModel(floatvalue, True, sensor.id)
                                 if newvalue:
                                     if functions.checkvaluenotinrange(floatvalue, sensor.minVal, sensor.maxVal):
                                         newvalue.valid = False
@@ -74,16 +74,16 @@ class ValueOld(Resource):
 class Value(Resource):
     # @jwt_required(fresh=True)
     def post(self, sensorId: str) -> Tuple:
-        data = _value_parser.parse_args()
-        sensor = SensorModel.find_by_sensorid(sensorId)
+        data: dict = _value_parser.parse_args()
+        sensor: SensorModel = SensorModel.find_by_sensorid(sensorId)
         if sensor:
             if functions.isfloat(str(data["value"])):
-                floatvalue = functions.getfloat(str(data["value"]))
-                allowedtime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
-                nowtime = datetime.now()
+                floatvalue: Union[float, None] = functions.getfloat(str(data["value"]))
+                allowedtime: datetime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+                nowtime: datetime = datetime.now()
                 if allowedtime < nowtime:
                     # Time delta is valid, check the value
-                    newvalue = ValueModel(floatvalue, True, sensor.id)
+                    newvalue: ValueModel = ValueModel(floatvalue, True, sensor.id)
                     if newvalue:
                         if functions.checkvaluenotinrange(floatvalue, sensor.minVal, sensor.maxVal):
                             newvalue.valid = False

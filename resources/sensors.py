@@ -11,5 +11,5 @@ class Sensors(Resource):
     def get(self) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
-        sensors = [x.json() for x in SensorModel.find_all()]
+        sensors: list = [x.json() for x in SensorModel.find_all()]
         return sensors, 200
