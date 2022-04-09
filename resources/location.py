@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from model.location import LocationModel
@@ -8,7 +10,7 @@ from utils.paramparsers import _location_parser
 class Location(Resource):
 
     @jwt_required(fresh=True)
-    def get(self, locationID: int):
+    def get(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
         location = LocationModel.find_by_id(locationID)
@@ -17,7 +19,7 @@ class Location(Resource):
         return location.json()
 
     @jwt_required(fresh=True)
-    def post(self, locationID: int):
+    def post(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
         data = _location_parser.parse_args()
@@ -30,7 +32,7 @@ class Location(Resource):
             return {"Message": "Error occurred. {}".format(E)}, 500
 
     @jwt_required(fresh=True)
-    def put(self, locationID: int):
+    def put(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
         data = _location_parser.parse_args()
@@ -49,7 +51,7 @@ class Location(Resource):
             return {"Message": "Error occurred. {}".format(E)}, 500
 
     @jwt_required(fresh=True)
-    def delete(self, locationID: int):
+    def delete(self, locationID: int) -> Tuple:
         if not is_admin():
             return ERROR_ACCESS_DENIED, 403
         try:
