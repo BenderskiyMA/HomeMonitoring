@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token
 from werkzeug.security import safe_str_cmp
@@ -8,7 +10,7 @@ from utils.paramparsers import _user_parser
 
 class UserLogin(Resource):
     @classmethod
-    def post(cls):
+    def post(cls) -> Tuple:
         # get data from  parser
         data = _user_parser.parse_args()
         if data["username"] is None:

@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
 from model.user import UserModel
@@ -10,7 +12,7 @@ from utils.paramparsers import _user_parser
 
 class UserManage(Resource):
     @jwt_required(fresh=True)
-    def post(self, username: str):
+    def post(self, username: str) -> Tuple:
 
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
@@ -25,7 +27,7 @@ class UserManage(Resource):
         return {"message": "User created."}, 201
 
     @jwt_required(fresh=True)
-    def put(self, username: str):
+    def put(self, username: str) -> Tuple:
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
         data = _user_parser.parse_args()
@@ -49,7 +51,7 @@ class UserManage(Resource):
             return {"message": "User modified."}, 201
 
     @jwt_required(fresh=True)
-    def delete(self, username: str):
+    def delete(self, username: str) -> Tuple:
         if not is_admin():
             return {"message": "Admin privilege required."}, 401
         data = _user_parser.parse_args()

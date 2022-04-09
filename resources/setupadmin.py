@@ -1,10 +1,12 @@
+from typing import Tuple
+
 from flask_restful import Resource
 from model.user import UserModel
 from utils.paramparsers import _user_parser
 
 
 class SetupAdmin(Resource):
-    def post(self):
+    def post(self) -> Tuple:
         data = _user_parser.parse_args()
 
         if UserModel.get_user_count() == 0:

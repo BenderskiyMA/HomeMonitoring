@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
+from typing import Tuple
 
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
 from model.sensor import SensorModel
 from model.value import ValueModel
-from utils.functions import isfloat, getfloat, checkvalueinrange
+from utils import functions
+
 from utils.paramparsers import _old_value_parser, _value_parser
 
 
@@ -13,7 +15,7 @@ class ValueOld(Resource):
 
     # Old API for old sensors
     # adding via GET String like narodmon.ru project
-    def get(self):
+    def get(self) -> Tuple:
         # Parse following data(act=add and miltiline sensorid$value pairs)
         # http://localhost:8080/data/?act=add&data=4535234523$238
         # 23412421433$4.3
@@ -22,30 +24,30 @@ class ValueOld(Resource):
         # 232222222$73
         data = _old_value_parser.parse_args()
         errtext = ""
-        errcode = 200
+        errcode: int = 200
 
         if data["act"] == "add":
             for line in data["data"].split("\n"):
                 (sensorid, value) = line.split("$")
-                if sensorid and isfloat(value):
-                    fv = getfloat(value)
-                    if fv:
-                        s = SensorModel.find_by_sensorid(sensorid)
-                        if s:
-                            lt = s.lastGoodValueTime + timedelta(minutes=s.updateRate)
-                            nt = datetime.now()
-                            if lt < nt:
+                if sensorid and functions.isfloat(value):
+                    floatvalue = functions.getfloat(str(value))
+                    if floatvalue:
+                        sensor = SensorModel.find_by_sensorid(sensorid)
+                        if sensor:
+                            allowedtime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+                            nowtime = datetime.now()
+                            if allowedtime < nowtime:
                                 # Time delta is valid, check the value
-                                v = ValueModel(fv, True, s.id)
-                                if v:
-                                    if not checkvalueinrange(fv, s.minVal, s.maxVal):
-                                        v.valid = False
+                                newvalue = ValueModel(floatvalue, True, sensor.id)
+                                if newvalue:
+                                    if functions.checkvaluenotinrange(floatvalue, sensor.minVal, sensor.maxVal):
+                                        newvalue.valid = False
                                     else:
-                                        s.lastGoodValue = fv
-                                        s.lastGoodValueTime = nt
-                                        s.save_to_db()
-                                    v.save_to_db()
-                                    errtext = s.updateRate
+                                        sensor.lastGoodValue = floatvalue
+                                        sensor.lastGoodValueTime = nowtime
+                                        sensor.save_to_db()
+                                    newvalue.save_to_db()
+                                    errtext = sensor.updateRate
                                     errcode = 200
 
                                 else:
@@ -71,25 +73,25 @@ class ValueOld(Resource):
 
 class Value(Resource):
     # @jwt_required(fresh=True)
-    def post(self, sensorId: str):
+    def post(self, sensorId: str) -> Tuple:
         data = _value_parser.parse_args()
         sensor = SensorModel.find_by_sensorid(sensorId)
         if sensor:
-            if isfloat(str(data["value"])):
-                fv = getfloat(data["value"])
-                lt = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
-                nt = datetime.now()
-                if lt < nt:
+            if functions.isfloat(str(data["value"])):
+                floatvalue = functions.getfloat(str(data["value"]))
+                allowedtime = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+                nowtime = datetime.now()
+                if allowedtime < nowtime:
                     # Time delta is valid, check the value
-                    v = ValueModel(fv, True, sensor.id)
-                    if v:
-                        if not checkvalueinrange(fv, sensor.minVal, sensor.maxVal):
-                            v.valid = False
+                    newvalue = ValueModel(floatvalue, True, sensor.id)
+                    if newvalue:
+                        if functions.checkvaluenotinrange(floatvalue, sensor.minVal, sensor.maxVal):
+                            newvalue.valid = False
                         else:
-                            sensor.lastGoodValue = fv
-                            sensor.lastGoodValueTime = nt
+                            sensor.lastGoodValue = floatvalue
+                            sensor.lastGoodValueTime = nowtime
                             sensor.save_to_db()
-                        v.save_to_db()
+                        newvalue.save_to_db()
                         return sensor.updateRate, 200
                     else:
                         return {"message": "Request has one or more Errors! Can not create ValueModel "

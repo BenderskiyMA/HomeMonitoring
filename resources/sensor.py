@@ -1,4 +1,5 @@
 import json
+from typing import Tuple
 
 from flask import jsonify
 from flask_restful import Resource, reqparse
@@ -12,7 +13,7 @@ from utils.paramparsers import _sensor_parser
 class Sensor(Resource):
 
     @jwt_required(fresh=True)
-    def get(self, sensorId: int):
+    def get(self, sensorId: int) -> Tuple:
         if is_admin():
             s = SensorModel.find_by_id(sensorId)
             if s is None:
@@ -24,7 +25,7 @@ class Sensor(Resource):
             return ERROR_ACCESS_DENIED, 403
 
     @jwt_required(fresh=True)
-    def delete(self, sensorId: int):
+    def delete(self, sensorId: int) -> Tuple:
         if is_admin():
             try:
                 s = SensorModel.find_by_id(sensorId)
@@ -40,27 +41,13 @@ class Sensor(Resource):
             return ERROR_ACCESS_DENIED, 403
 
     @jwt_required(fresh=True)
-    def post(self, sensorId: int):
+    def post(self, sensorId: int) -> Tuple:
         if is_admin():
             data = _sensor_parser.parse_args()
             if data["sensorIdentifier"] and SensorModel.find_by_sensorid(data["sensorIdentifier"]):
                 return {"Message": "Error! Sensor with sensorMAC '{}' already exists.".format(
                     data["sensorIdentifier"])}, 400
             del data["id"]
-            # "id": 10,
-            # "sensorName": "Температура в кессоне. Верх",
-            # "sensorType": "temp",
-            # "sensorUnitName": "celsius",
-            # "sensorMaxValue": 100.0,
-            # "sensorMinValue": -100.0,
-            # "updateRate": 1,
-            # "lastGoodValue": 0.56,
-            # "lastGoodValueMoment": "2022-04-01T15:28:29.000+00:00",
-            # "locationID": 1,
-            # "locationName": "Дача",
-            # "sourceList": "*",
-            # "sensorIdentifier": "ESPBCFF4D82893FT1",
-            # "changedState": false
             s = SensorModel(sensorName=data["sensorName"],
                             sensorType=data["sensorType"],
                             unitName=data["sensorUnitName"],
@@ -78,7 +65,7 @@ class Sensor(Resource):
             return ERROR_ACCESS_DENIED, 403
 
     @jwt_required(fresh=True)
-    def put(self, sensorId: int):
+    def put(self, sensorId: int) -> Tuple:
         if is_admin():
             data = _sensor_parser.parse_args()
             s = SensorModel.find_by_sensorid(data["sensorIdentifier"])

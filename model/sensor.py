@@ -33,10 +33,10 @@ class SensorModel(db.Model):
         self.maxVal = sensorMaxValue
         self.minVal = sensorMinValue
         self.locationID = locationID
-        self.sourceList = sourceList,
-        self.sensorMAC = sensorIdentifier,
-        self.sensorType = sensorType,
-        self.lastGoodValue = 0,
+        self.sourceList = sourceList
+        self.sensorMAC = sensorIdentifier
+        self.sensorType = sensorType
+        self.lastGoodValue = 0
         self.updateRate = updateRate
 
     def json(self):
