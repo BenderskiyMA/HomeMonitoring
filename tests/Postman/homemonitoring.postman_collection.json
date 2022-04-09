@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\": \"admin\",\"password\": \"3kjt6extcnm\"}"
+					"raw": "{\"username\": \"admin\",\"password\": \"123QWEasd\"}"
 				},
 				"url": {
 					"raw": "{{url}}/setupadmin",
@@ -104,7 +104,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\":\"admin\",\"password\":\"3kjt6extcnm\"}"
+					"raw": "{\"username\":\"admin\",\"password\":\"123QWEasd\"}"
 				},
 				"url": {
 					"raw": "{{url}}/login",
