@@ -27,7 +27,7 @@ class ValueOld(Resource):
         if data["act"] == "add":
             for line in data["data"].split("\n"):
                 (sensorid, value) = line.split("$")
-                if sensorid and value and isfloat(value):
+                if sensorid and isfloat(value):
                     fv = getfloat(value)
                     if fv:
                         s = SensorModel.find_by_sensorid(sensorid)
@@ -74,27 +74,31 @@ class Value(Resource):
     def post(self, sensorId: str):
         data = _value_parser.parse_args()
         sensor = SensorModel.find_by_sensorid(sensorId)
-        if sensor and data["value"] and isfloat(data["value"]):
-            fv = getfloat(data["value"])
-            lt = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
-            nt = datetime.now()
-            if lt < nt:
-                # Time delta is valid, check the value
-                v = ValueModel(fv, True, sensor.id)
-                if v:
-                    if not checkvalueinrange(fv, sensor.minVal, sensor.maxVal):
-                        v.valid = False
+        if sensor:
+            if isfloat(str(data["value"])):
+                fv = getfloat(data["value"])
+                lt = sensor.lastGoodValueTime + timedelta(minutes=sensor.updateRate)
+                nt = datetime.now()
+                if lt < nt:
+                    # Time delta is valid, check the value
+                    v = ValueModel(fv, True, sensor.id)
+                    if v:
+                        if not checkvalueinrange(fv, sensor.minVal, sensor.maxVal):
+                            v.valid = False
+                        else:
+                            sensor.lastGoodValue = fv
+                            sensor.lastGoodValueTime = nt
+                            sensor.save_to_db()
+                        v.save_to_db()
+                        return sensor.updateRate, 200
                     else:
-                        sensor.lastGoodValue = fv
-                        sensor.lastGoodValueTime = nt
-                        sensor.save_to_db()
-                    v.save_to_db()
-                    return sensor.updateRate, 200
+                        return {"message": "Request has one or more Errors! Can not create ValueModel "
+                                           "object."}, 500
                 else:
-                    return {"message": "Request has one or more Errors! Can not create ValueModel "
-                                       "object."}, 500
+                    return {"message": "Request has one or more Errors! Too many requests."}, 400
             else:
-                return {"message": "Request has one or more Errors! Too many requests."}, 400
+                return {"message": "Error! Can not parse value string '{}', something fucking wrong with float "
+                                   "value.".format(data["value"])}, 500
         else:
             return {"message": "Request has one or more Errors! Can not find Sensor object with id {}.".format(
                 sensorId)}, 500
