@@ -1,12 +1,10 @@
-import logging
 import os
+from logging import debug
 
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager, get_jwt_identity, verify_jwt_in_request
 from typing import Any, Tuple
-
-from flask_restful.utils import cors
 
 from model.user import UserModel
 from resources.blacklist import BLACKLIST
@@ -104,10 +102,8 @@ api.add_resource(Location, '/api/location/<int:locationID>')
 api.add_resource(Locations, '/api/locations')
 api.add_resource(ValueOld, '/monitoring/data/')
 api.add_resource(Value, '/api/value/<string:sensorId>')
-api.add_resource(Values, '/api/data/<int:sensorId>/<string:periodType>',
-                         '/api/values/<int:sensorId>/<string:periodType>',
-                         '/api/data/<int:sensorId>/<string:periodType>/',
-                         '/api/values/<int:sensorId>/<string:periodType>/')
+api.add_resource(Values, '/api/data/<int:sensorId>/<string:periodType>/', '/api/values/<int:sensorId>/<string'
+                                                                          ':periodType>/')
 api.add_resource(UserLogin, '/login')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(UserLogout, '/logout')

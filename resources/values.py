@@ -1,3 +1,5 @@
+
+
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from model.value import ValueModel
@@ -40,17 +42,12 @@ class Values(Resource):
         # if periodType not in PERIOD_TYPES:
         #    return {"message": "Unknown period type value (only hour|day|week|month are accepted)."}, 400
         return {
-            "hour": (gethourvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
-            "day": (getdayvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
-            "week": (getweekvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
-            "month": (getmonthvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
-        }.get(periodType, ({"message": "Unknown period type value (only hour|day|week|month are accepted)."}, 400,
-                           {'Access-Control-Allow-Origin': '*'}))
+            "hour": ([x for x in gethourvalues(sensorId)], 200),
+            "day": ([x for x in getdayvalues(sensorId)], 200),
+            "week": ([x for x in getweekvalues(sensorId)], 200),
+            "month": ([x for x in getmonthvalues(sensorId)], 200),
+        }.get(periodType, ({"message": "Unknown period type value (only hour|day|week|month are accepted)."}, 400))
 
-    def options(self, sensorId: int, periodType: str):
-        return {'Allow': 'GET'}, 200, {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET',
-                                       'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, '
-                                                                       'X-Requested-With, Content-Type, '
-                                                                       'Access-Control-Request-Method, '
-                                                                       'Access-Control-Request-Headers'}
+
+
 

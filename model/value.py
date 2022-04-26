@@ -1,9 +1,11 @@
 import datetime
+from typing import List
 
-from flask import jsonify
+from flask import jsonify, Response
+from sqlalchemy import String
 
 from db import db
-
+from sqlalchemy.sql import text
 
 
 class ValueModel(db.Model):
@@ -30,6 +32,7 @@ class ValueModel(db.Model):
                         "valid": self.valid,
                         "sensorId": self.sensorId,
                         })
+    # [{"sensorID":10,"value":1.12,"value2":0.0,"moment":"2022-04-26T16:48:45.000+00:00","updateRate":0,"valid":true}
 
     @classmethod
     def find_values_for_prepared_statement(cls, sensorId: int, fromDate: datetime, toDate: datetime,
@@ -38,8 +41,8 @@ class ValueModel(db.Model):
                         "fromdate": fromDate,
                         "todate": toDate}
         queryresult = db.engine.execute(statement, params)
-        return [{"value": float(row["value"]),
-                 "value2": float(row["maxval"]),
+        return [{"value": float(row["maxval"]),
+                 "value2": float(row["value"]),
                  "moment": row["createTimeStamp"].isoformat(),
                  "sensorID": sensorId,
                  "updateRate": 0,
@@ -55,7 +58,8 @@ class ValueModel(db.Model):
                                  "sensorID=:sensorid and createtimestamp >=:fromdate and "
                                  "createtimestamp<=:todate  and valid=TRUE order by "
                                  "createTimeStamp")
-        return cls.find_values_for_prepared_statement(sensorId, fromDate, toDate, statement)
+        result = cls.find_values_for_prepared_statement(sensorId, fromDate, toDate, statement)
+        return result
 
     @classmethod
     def find_by_sensor_id_from_to_two_values_week(cls, sensorId: int,
