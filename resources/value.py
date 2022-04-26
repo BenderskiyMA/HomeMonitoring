@@ -14,6 +14,7 @@ from utils.paramparsers import _old_value_parser, _value_parser
 class ValueOld(Resource):
 
     # Old API for old sensors
+    # /data
     # adding via GET String like narodmon.ru project
     def get(self) -> Tuple:
         # Parse following data(act=add and miltiline sensorid$value pairs)
@@ -72,6 +73,7 @@ class ValueOld(Resource):
 
 
 class Value(Resource):
+    # /value posting
     # @jwt_required(fresh=True)
     def post(self, sensorId: str) -> Tuple:
         data: dict = _value_parser.parse_args()

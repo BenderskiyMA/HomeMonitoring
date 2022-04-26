@@ -5,6 +5,8 @@ from psycopg2._psycopg import Boolean
 
 ERROR_ACCESS_DENIED = {"message": "Error! Access denied!"}
 
+PERIOD_TYPES = ["hour", "day", "week", "month"]
+
 
 def isfloat(num: str) -> bool:
     """Takes a string, representing number (positive  or negative or zero), returns True is it is valid number and
