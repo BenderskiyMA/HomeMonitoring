@@ -38,8 +38,8 @@ class ValueModel(db.Model):
                         "fromdate": fromDate,
                         "todate": toDate}
         queryresult = db.engine.execute(statement, params)
-        return [{"value": float(row["maxval"]),
-                 "value2": float(row["value"]),
+        return [{"value": float(row["value"]),
+                 "value2": float(row["maxval"]),
                  "moment": row["createTimeStamp"].isoformat(),
                  "sensorID": sensorId,
                  "updateRate": 0,
