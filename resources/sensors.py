@@ -9,7 +9,7 @@ from utils.functions import is_admin, ERROR_ACCESS_DENIED
 class Sensors(Resource):
     # @jwt_required(fresh=True)
     def get(self) -> Tuple:
-        #if not is_admin():
+        # if not is_admin():
         #    return ERROR_ACCESS_DENIED, 403
         sensors: list = [x.json() for x in SensorModel.find_all()]
         return sensors, 200, {'Access-Control-Allow-Origin': '*'}
@@ -20,4 +20,3 @@ class Sensors(Resource):
                                                                        'X-Requested-With, Content-Type, '
                                                                        'Access-Control-Request-Method, '
                                                                        'Access-Control-Request-Headers'}
-
