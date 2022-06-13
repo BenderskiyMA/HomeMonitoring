@@ -49,15 +49,15 @@ class Sensor(Resource):
                     data["sensorIdentifier"])}, 400
             del data["id"]
             sensor: SensorModel = SensorModel(sensorName=data["sensorName"],
-                            sensorType=data["sensorType"],
-                            unitName=data["sensorUnitName"],
-                            maxVal=data["sensorMaxValue"],
-                            minVal=data["sensorMinValue"],
-                            updateRate=data["updateRate"],
-                            locationId=data["locationID"],
-                            sourceList=data["sourceList"],
-                            sensorMAC=data["sensorIdentifier"]
-                            )
+                                              sensorType=data["sensorType"],
+                                              sensorUnitName=data["sensorUnitName"],
+                                              sensorMaxValue=data["sensorMaxValue"],
+                                              sensorMinValue=data["sensorMinValue"],
+                                              updateRate=data["updateRate"],
+                                              locationID=data["locationID"],
+                                              sourceList=data["sourceList"],
+                                              sensorIdentifier=data["sensorIdentifier"],
+                                              )
             sensor.save_to_db()
             return {"Message": "Sensor added."}, 201
 
