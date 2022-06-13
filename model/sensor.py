@@ -1,4 +1,3 @@
-
 from db import db
 
 
@@ -16,6 +15,7 @@ class SensorModel(db.Model):
     lastGoodValue = db.Column(db.Float(precision=2), nullable=False, default=0.00)
     lastGoodValueTime = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
     updateRate = db.Column(db.Integer, default=1)
+    showInList = db.Column(db.Integer, default=1)
 
     location = db.relationship('LocationModel')
 
@@ -27,7 +27,8 @@ class SensorModel(db.Model):
                  sourceList: str,
                  sensorIdentifier: str,
                  sensorType: str,
-                 updateRate: int):
+                 updateRate: int,
+                 showInList: int):
         self.sensorName = sensorName
         self.unitName = sensorUnitName
         self.maxVal = sensorMaxValue
@@ -38,6 +39,7 @@ class SensorModel(db.Model):
         self.sensorType = sensorType
         self.lastGoodValue = 0
         self.updateRate = updateRate
+        self.showInList = showInList
 
     def json(self):
         """
@@ -69,7 +71,8 @@ class SensorModel(db.Model):
                   "lastGoodValue": self.lastGoodValue,
                   "lastGoodValueMoment": self.lastGoodValueTime.isoformat(),
                   "updateRate": self.updateRate,
-                  "changedState": False
+                  "changedState": False,
+                  "showInList": self.showInList == 1
                   }
         return result
 
@@ -88,6 +91,10 @@ class SensorModel(db.Model):
     @classmethod
     def find_all(cls):
         return cls.query.all()
+
+    @classmethod
+    def find_all_except_hidden(cls):
+        return cls.query.filter_by(showInList=True)
 
     def save_to_db(self):
         db.session.add(self)

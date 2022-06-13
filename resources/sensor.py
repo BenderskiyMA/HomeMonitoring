@@ -57,6 +57,7 @@ class Sensor(Resource):
                                               locationID=data["locationID"],
                                               sourceList=data["sourceList"],
                                               sensorIdentifier=data["sensorIdentifier"],
+                                              showInList=int(data["showInList"])
                                               )
             sensor.save_to_db()
             return {"Message": "Sensor added."}, 201
@@ -81,6 +82,7 @@ class Sensor(Resource):
                     sensor.sourceList = data["sourceList"]
                     sensor.sensorType = data["sensorType"]
                     sensor.updateRate = data["updateRate"]
+                    sensor.showInList = int(data["showInList"])
                     sensor.save_to_db()
                 else:
                     del data["id"]
