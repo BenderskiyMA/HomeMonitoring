@@ -40,10 +40,10 @@ class Values(Resource):
         # if periodType not in PERIOD_TYPES:
         #    return {"message": "Unknown period type value (only hour|day|week|month are accepted)."}, 400
         return {
-            "hour": ([x for x in gethourvalues(sensorId)], 200, {'Access-Control-Allow-Origin': '*'}),
-            "day": ([x for x in getdayvalues(sensorId)], 200, {'Access-Control-Allow-Origin': '*'}),
-            "week": ([x for x in getweekvalues(sensorId)], 200, {'Access-Control-Allow-Origin': '*'}),
-            "month": ([x for x in getmonthvalues(sensorId)], 200, {'Access-Control-Allow-Origin': '*'}),
+            "hour": (gethourvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
+            "day": (getdayvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
+            "week": (getweekvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
+            "month": (getmonthvalues(sensorId), 200, {'Access-Control-Allow-Origin': '*'}),
         }.get(periodType, ({"message": "Unknown period type value (only hour|day|week|month are accepted)."}, 400,
                            {'Access-Control-Allow-Origin': '*'}))
 
