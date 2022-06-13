@@ -8,6 +8,6 @@ class TokenRefresh(Resource):
     @jwt_required(refresh=True)
     def post(self) -> Tuple:
         current_user: int = get_jwt_identity()
-        new_token: str = create_access_token(identity=current_user, fresh=False)
+        new_token: str = create_access_token(identity=current_user, fresh=True)
         return {'access_token': new_token
                 }, 200
