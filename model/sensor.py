@@ -1,3 +1,5 @@
+from typing import Dict
+
 from db import db
 
 
@@ -15,33 +17,36 @@ class SensorModel(db.Model):
     lastGoodValue = db.Column(db.Float(precision=2), nullable=False, default=0.00)
     lastGoodValueTime = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
     updateRate = db.Column(db.Integer, default=1)
-    showInList = db.Column(db.Integer, default=1)
+    showInList = db.Column(db.Boolean, default=True)
 
     location = db.relationship('LocationModel')
 
-    def __init__(self, sensorName: str,
-                 sensorUnitName: str,
-                 sensorMaxValue: float,
-                 sensorMinValue: float,
-                 locationID: int,
-                 sourceList: str,
-                 sensorIdentifier: str,
-                 sensorType: str,
-                 updateRate: int,
-                 showInList: int):
-        self.sensorName = sensorName
-        self.unitName = sensorUnitName
-        self.maxVal = sensorMaxValue
-        self.minVal = sensorMinValue
-        self.locationID = locationID
-        self.sourceList = sourceList
-        self.sensorMAC = sensorIdentifier
-        self.sensorType = sensorType
+    def __init__(self,
+                 # sensorName: str,
+                 # sensorUnitName: str,
+                 # sensorMaxValue: float,
+                 # sensorMinValue: float,
+                 # locationID: int,
+                 # sourceList: str,
+                 # sensorIdentifier: str,
+                 # sensorType: str,
+                 # updateRate: int,
+                 # showInList: int
+                 data: Dict
+                 ):
+        self.sensorName = data["sensorName"]
+        self.unitName = data["sensorUnitName"]
+        self.maxVal = data["sensorMaxValue"]
+        self.minVal = data["sensorMinValue"]
+        self.locationID = data["locationID"]
+        self.sourceList = data["sourceList"]
+        self.sensorMAC = data["sensorIdentifier"]
+        self.sensorType = data["sensorType"]
         self.lastGoodValue = 0
-        self.updateRate = updateRate
-        self.showInList = showInList
+        self.updateRate = data["updateRate"]
+        self.showInList = data["showInList"]
 
-    def json(self):
+    def json(self) -> Dict:
         """
                 "id": 10,
                 "sensorName": "Температура в кессоне. Верх",
@@ -58,23 +63,22 @@ class SensorModel(db.Model):
                 "sensorIdentifier": "ESPBCFF4D82893FT1",
                 "changedState": false
         """
-        result = {"id": self.id,
-                  "sensorName": self.sensorName,
-                  "sensorUnitName": self.unitName,
-                  "sensorMaxValue": self.maxVal,
-                  "sensorMinValue": self.minVal,
-                  "locationID": self.locationID,
-                  "locationName": self.location.locationName,
-                  "sourceList": self.sourceList,
-                  "sensorIdentifier": self.sensorMAC,
-                  "sensorType": self.sensorType,
-                  "lastGoodValue": self.lastGoodValue,
-                  "lastGoodValueMoment": self.lastGoodValueTime.isoformat(),
-                  "updateRate": self.updateRate,
-                  "changedState": False,
-                  "showInList": self.showInList == 1
-                  }
-        return result
+        return {"id": self.id,
+                "sensorName": self.sensorName,
+                "sensorUnitName": self.unitName,
+                "sensorMaxValue": self.maxVal,
+                "sensorMinValue": self.minVal,
+                "locationID": self.locationID,
+                "locationName": self.location.locationName,
+                "sourceList": self.sourceList,
+                "sensorIdentifier": self.sensorMAC,
+                "sensorType": self.sensorType,
+                "lastGoodValue": self.lastGoodValue,
+                "lastGoodValueMoment": self.lastGoodValueTime.isoformat(),
+                "updateRate": self.updateRate,
+                "changedState": False,
+                "showInList": self.showInList
+                }
 
     @classmethod
     def find_by_id(cls, _id: int):
@@ -90,10 +94,12 @@ class SensorModel(db.Model):
 
     @classmethod
     def find_all(cls):
+        """This method returns all sensors. Use it for Admin pages."""
         return cls.query.all()
 
     @classmethod
     def find_all_except_hidden(cls):
+        """This method returns only those sensors, that contain true in showInList field. Use it in UI"""
         return cls.query.filter_by(showInList=True)
 
     def save_to_db(self):
