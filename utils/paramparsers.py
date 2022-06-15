@@ -29,6 +29,7 @@ _user_parser.add_argument("userrole",
 "lastGoodValue": self.lastGoodValue,
 "lastGoodValueTime": self.lastGoodValueTime,
 "updateRate": self.updateRate
+"showInList": self.showInList
 })
 """
 
@@ -90,6 +91,11 @@ _sensor_parser.add_argument("updateRate",
                             required=True,
                             help="This field can not be blank!"
                             )
+_sensor_parser.add_argument("showInList",
+                            type=bool,
+                            required=True,
+                            help="This field can not be blank!"
+                            )
 
 _location_parser: RequestParser = reqparse.RequestParser()
 _location_parser.add_argument("id",
@@ -123,8 +129,7 @@ _old_value_parser.add_argument("data",
 
 _value_parser = reqparse.RequestParser()
 _value_parser.add_argument("value",
-                               type=float,
-                               required=True,
-                               help="This field can not be blank!"
-                               )
-
+                           type=float,
+                           required=True,
+                           help="This field can not be blank!"
+                           )

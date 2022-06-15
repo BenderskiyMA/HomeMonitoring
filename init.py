@@ -13,7 +13,7 @@ from resources.blacklist import BLACKLIST
 from resources.location import Location
 from resources.locations import Locations
 from resources.sensor import Sensor
-from resources.sensors import Sensors
+from resources.sensors import Sensors, AllSensors
 from resources.setupadmin import SetupAdmin
 from resources.tokenrefresh import TokenRefresh
 from resources.userlogin import UserLogin
@@ -100,6 +100,7 @@ def add_claims_to_jwt(identity: int) -> dict:
 
 api.add_resource(Sensor, '/api/sensor/<int:sensorId>')
 api.add_resource(Sensors, '/api/sensors')
+api.add_resource(AllSensors, '/api/sensors/all')
 api.add_resource(Location, '/api/location/<int:locationID>')
 api.add_resource(Locations, '/api/locations')
 api.add_resource(ValueOld, '/monitoring/data/')

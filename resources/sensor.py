@@ -48,15 +48,17 @@ class Sensor(Resource):
                 return {"Message": "Error! Sensor with sensorMAC '{}' already exists.".format(
                     data["sensorIdentifier"])}, 400
             del data["id"]
-            sensor: SensorModel = SensorModel(sensorName=data["sensorName"],
-                                              sensorType=data["sensorType"],
-                                              sensorUnitName=data["sensorUnitName"],
-                                              sensorMaxValue=data["sensorMaxValue"],
-                                              sensorMinValue=data["sensorMinValue"],
-                                              updateRate=data["updateRate"],
-                                              locationID=data["locationID"],
-                                              sourceList=data["sourceList"],
-                                              sensorIdentifier=data["sensorIdentifier"],
+            sensor: SensorModel = SensorModel(data
+                                              # sensorName=data["sensorName"],
+                                              # sensorType=data["sensorType"],
+                                              # sensorUnitName=data["sensorUnitName"],
+                                              # sensorMaxValue=data["sensorMaxValue"],
+                                              # sensorMinValue=data["sensorMinValue"],
+                                              # updateRate=data["updateRate"],
+                                              # locationID=data["locationID"],
+                                              # sourceList=data["sourceList"],
+                                              # sensorIdentifier=data["sensorIdentifier"],
+                                              # showInList=data["showInList"]
                                               )
             sensor.save_to_db()
             return {"Message": "Sensor added."}, 201
@@ -81,10 +83,11 @@ class Sensor(Resource):
                     sensor.sourceList = data["sourceList"]
                     sensor.sensorType = data["sensorType"]
                     sensor.updateRate = data["updateRate"]
+                    sensor.showInList = data["showInList"]
                     sensor.save_to_db()
                 else:
                     del data["id"]
-                    sensor = SensorModel(**data)
+                    sensor = SensorModel(data)
                     sensor.save_to_db()
                 return sensor.json(), 200
             except Exception as E:
